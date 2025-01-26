@@ -3,6 +3,7 @@
 
 Sensor::Sensor() : i2c(PB_7, PB_6) {} // Inicializa o I2C nos pinos SDA e SCL
 
+// Função para sair do modo de suspensão:
 void Sensor::setup() {
     char data[2];
 
@@ -12,6 +13,7 @@ void Sensor::setup() {
     i2c.write(MPU6050_ADDR, data, 2);
 }
 
+// Função para ler o giroscópio:
 int16_t Sensor::readGyroX() {
     char reg = GYRO_XOUT_H; // Registrador do eixo X
     char data[2]; // Buffer para armazenar os 2 bytes (MSB E LSB)
@@ -22,6 +24,7 @@ int16_t Sensor::readGyroX() {
     return (data[0] << 8) | data[1]; // Combina MSB e LSB
 }
 
+// Função para calcular o bias:
 int16_t Sensor::calibrate() {
     int32_t sum = 0;
 
@@ -34,6 +37,7 @@ int16_t Sensor::calibrate() {
     return sum / 100; // Calcula a média (bias)
 }
 
+// Função que corrige o bias:
 int16_t Sensor::readCorrectedGyroX(int16_t bias) {
     return readGyroX() - bias; // Retorna o valor corrigdo
 }
